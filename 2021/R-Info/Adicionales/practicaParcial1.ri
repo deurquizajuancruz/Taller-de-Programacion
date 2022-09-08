@@ -1,0 +1,95 @@
+programa practicaParcial1
+procesos
+  proceso unaflor(ES flores:numero)
+  comenzar
+    flores:=0
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores + 1
+    repetir flores
+      depositarFlor
+  fin
+  proceso enviarID
+  comenzar
+    EnviarMensaje(1,RobotTres)
+    EnviarMensaje(2,RobotCuatro)
+  fin
+  proceso juntar
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+areas
+  areajefe: AreaP(1,1,1,1)
+  arealimpiador:AreaP(1,20,100,20)
+  areacorredor1:AreaP(15,1,46,1)
+  areacorredor2:AreaP(25,1,46,1)
+robots
+  robot corredores
+  variables
+    av,posicion,unaflor,flores,pasos,id:numero
+  comenzar
+    RecibirMensaje(id,RobotUno)
+    unaflor:=0
+    posicion:=PosCa
+    av:=PosAv
+    mientras(posicion<40)
+      Random(pasos,1,6)
+      repetir pasos
+        unaflor(flores)
+        si (flores>1)
+          unaflor:=unaflor + 1
+        BloquearEsquina(av,posicion)
+        mover
+        LiberarEsquina(av,posicion)
+        posicion:=PosCa
+    EnviarMensaje(id,RobotUno)
+    EnviarMensaje(unaflor,RobotUno)
+  fin
+  robot limpiador
+  variables
+    av,ca:numero
+  comenzar
+    av:=PosAv
+    ca:=PosCa
+    repetir 99
+      BloquearEsquina(av,ca)
+      juntar
+      LiberarEsquina(av,ca)
+      av:=PosAv
+      ca:=PosCa
+  fin
+  robot jefe
+  variables
+    m,cant,id,idmin:numero
+  comenzar
+    m:=999
+    enviarID
+    repetir 2
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(cant,RobotTres)
+      sino
+        RecibirMensaje(cant,RobotCuatro)
+      si (cant<m)
+        m:=cant
+        idmin:=id
+    Informar('Robot',idmin)
+    Informar('Esquinas',cant)
+  fin
+variables
+  RobotUno:jefe
+  RobotDos:limpiador
+  RobotTres,RobotCuatro:corredores
+comenzar
+  AsignarArea(RobotUno,areajefe)
+  AsignarArea(RobotDos,arealimpiador)
+  AsignarArea(RobotTres,areacorredor1)
+  AsignarArea(RobotCuatro,areacorredor2)
+  Iniciar(RobotUno,1,1)
+  Iniciar(RobotDos,1,20)
+  Iniciar(RobotTres,15,1)
+  Iniciar(RobotCuatro,25,1)
+fin

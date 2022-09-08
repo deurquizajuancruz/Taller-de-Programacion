@@ -1,0 +1,143 @@
+programa Punto2Practica3
+procesos
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso Escalon1(E largo:numero;ES flores:numero)
+  comenzar
+    repetir largo
+      mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores + 1
+    derecha
+    repetir largo
+      mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores + 1
+  fin
+  proceso Escalon2(E largo:numero;ES papeles:numero)
+  comenzar
+    repetir largo
+      mover
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles +1
+    izquierda
+    repetir largo
+      mover
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles + 1 
+  fin
+  proceso recorrido1(ES flores:numero;E quiensoy:numero)
+  variables
+    l:numero
+  comenzar
+    l:=5
+    repetir 4
+      Escalon1(l,flores)
+      l:=l - 1
+      izquierda
+    mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores + 1
+    derecha
+    BloquearEsquina(16,16)
+    mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores + 1
+    EnviarMensaje(quiensoy,RobotTres)
+    repetir 2
+      derecha
+    mover
+    LiberarEsquina(16,16)
+    l:=2
+    repetir 4
+      Escalon1(l,flores)
+      l:=l + 1
+      izquierda
+  fin
+  proceso recorrido2(ES papeles:numero;E quiensoy:numero)
+  variables
+    l:numero
+  comenzar
+    l:=5
+    repetir 4
+      Escalon2(l,papeles)
+      l:=l - 1
+      derecha
+    mover
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles + 1
+    izquierda
+    BloquearEsquina(16,16)
+    mover
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles + 1
+    EnviarMensaje(quiensoy,RobotTres)
+    repetir 2
+      derecha
+    mover
+    LiberarEsquina(16,16)
+    l:=2
+    repetir 4
+      Escalon2(l,papeles)
+      l:=l + 1
+      derecha
+  fin
+areas
+  carrera:AreaPC(1,1,31,30)
+robots
+  robot robot1
+  variables
+    f,quiensoy:numero
+  comenzar
+    f:=0
+    RecibirMensaje(quiensoy,RobotTres)
+    recorrido1(f,quiensoy)
+    Informar(f)
+    EnviarMensaje(V,RobotTres)
+  fin
+  robot robot2
+  variables
+    p,quiensoy:numero
+  comenzar
+    p:=0
+    RecibirMensaje(quiensoy,RobotTres)
+    recorrido2(p,quiensoy)
+    Informar(p)  
+    EnviarMensaje(V,RobotTres)
+  fin
+  robot jefe
+  variables
+    ganador,perdedor:numero
+    b1,b2:boolean
+  comenzar
+    EnviarMensaje(1,RobotUno)
+    EnviarMensaje(2,RobotDos)
+    RecibirMensaje(ganador,*)
+    RecibirMensaje(perdedor,*)
+    RecibirMensaje(b1,*)
+    RecibirMensaje(b2,*)
+    Informar(ganador)
+  fin
+variables
+  RobotUno:robot1
+  RobotDos:robot2
+  RobotTres:jefe 
+comenzar
+  AsignarArea(RobotUno,carrera)
+  AsignarArea(RobotDos,carrera)
+  AsignarArea(RobotTres,carrera)
+  Iniciar(RobotUno,1,1)
+  Iniciar(RobotDos,31,1)
+  Iniciar(RobotTres,15,1)
+fin

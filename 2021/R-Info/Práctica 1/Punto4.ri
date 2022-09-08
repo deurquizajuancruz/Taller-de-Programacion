@@ -1,0 +1,57 @@
+programa Punto4Practica1
+procesos
+  proceso JuntarFlores
+  comenzar
+    mientras (PosCa<100)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      mover
+  fin
+  proceso JuntarPapeles
+  comenzar
+    mientras (PosCa<100)
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+      mover
+  fin
+areas
+  area1:AreaP(1,1,25,100)
+  area2:AreaP(26,1,50,100)
+  area3:AreaP(51,1,75,100)
+  area4:AreaP(76,1,100,100)
+robots
+  robot robot1
+  comenzar
+    repetir 25
+      JuntarFlores
+      si (PosAv<25)
+        Pos(PosAv+1,1)
+    Pos(51,1)
+    repetir 25
+      JuntarFlores
+      si (PosAv<75)
+        Pos(PosAv+1,1)
+  fin
+  robot robot2
+  comenzar
+    repetir 25
+      JuntarPapeles
+      si (PosAv<50)
+        Pos(PosAv+1,1)
+    Pos(76,1)
+    repetir 25
+      JuntarPapeles
+      si (PosAv<100)
+        Pos(PosAv+1,1)   
+  fin
+variables
+  RobotUno:robot1
+  RobotDos:robot2
+comenzar
+  AsignarArea(RobotUno,area1)
+  AsignarArea(RobotDos,area2)
+  AsignarArea(RobotUno,area3)
+  AsignarArea(RobotDos,area4)
+  Iniciar(RobotUno,1,1)
+  Iniciar(RobotDos,26,1)
+fin

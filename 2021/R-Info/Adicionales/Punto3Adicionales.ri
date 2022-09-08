@@ -1,0 +1,93 @@
+programa Punto3Adicionales
+procesos
+  proceso juntarpapeles (ES papeles:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles + 1
+  fin
+  proceso maximo(E papeles:numero; E id:numero; ES max:numero; ES maxid:numero)
+  comenzar
+    si (papeles>max)
+      max:=papeles
+      maxid:=id
+  fin
+  proceso mandaridyoportunidades
+  variables
+    oportunidades:numero
+  comenzar
+    EnviarMensaje(1,uno)
+    EnviarMensaje(2,dos)
+    Random(oportunidades,1,8)
+    EnviarMensaje(oportunidades,uno)
+    Random(oportunidades,1,8)
+    EnviarMensaje(oportunidades,dos)
+  fin
+  proceso ganador(E maxid:numero)
+  comenzar
+    Informar(maxid)
+    si (maxid=1)
+      EnviarMensaje(V,uno)
+      EnviarMensaje(F,dos)
+    sino
+      EnviarMensaje(F,uno)
+      EnviarMensaje(V,dos)
+  fin
+areas
+  papelero1:AreaP(1,7,1,7)
+  papelero2:AreaP(1,8,1,8)
+  elcoordinador:AreaP(1,6,1,6)
+  rectangulo:AreaPC(3,6,63,16)
+robots
+  robot papelero
+  variables
+    volver,avenida,calle,oportunidades,id,papeles:numero
+    posicion:boolean
+  comenzar
+    papeles:=0
+    volver:=PosCa
+    RecibirMensaje(id,tres)
+    RecibirMensaje(oportunidades,tres)
+    repetir oportunidades
+      Random(avenida,3,63)
+      Random(calle,6,16)
+      BloquearEsquina(avenida,calle)
+      Pos(avenida,calle)
+      juntarpapeles(papeles)
+      Pos(1,volver)
+      LiberarEsquina(avenida,calle)
+    EnviarMensaje(id,tres)
+    EnviarMensaje(papeles,tres)
+    RecibirMensaje(posicion,tres)
+    si (posicion)
+      Pos(3,6)
+  fin
+  robot coordinador
+  variables
+    id,papeles,max,maxid:numero
+  comenzar
+    max:=0
+    mandaridyoportunidades
+    repetir 2
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(papeles,uno)
+      sino
+        RecibirMensaje(papeles,dos)
+      maximo(papeles,id,max,maxid)
+    ganador(maxid)
+  fin
+variables
+  uno:papelero
+  dos:papelero
+  tres:coordinador
+comenzar
+  AsignarArea(uno,papelero1)
+  AsignarArea(uno,rectangulo)
+  AsignarArea(dos,papelero2)
+  AsignarArea(dos,rectangulo)
+  AsignarArea(tres,elcoordinador)
+  Iniciar(uno,1,7)
+  Iniciar(dos,1,8)
+  Iniciar(tres,1,6)
+fin

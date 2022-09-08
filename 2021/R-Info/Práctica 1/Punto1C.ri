@@ -1,0 +1,42 @@
+programa Punto1CPractica1
+procesos
+  proceso avenida1(ES flores:numero;ES esquinas:numero)
+  comenzar
+    repetir 99
+      si ~(HayFlorEnLaEsquina)
+        esquinas:= esquinas +1
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+      mover
+    si ~(HayFlorEnLaEsquina)
+      esquinas:= esquinas +1
+    mientras (HayFlorEnLaBolsa)
+      depositarFlor
+      flores:= flores +1
+  fin
+areas
+  ciudad:AreaC(1,1,100,100)
+robots
+  robot robot1
+  variables
+    esquina: numero
+    floresbolsa: numero
+  comenzar
+    esquina:= 0
+    floresbolsa:= 0
+    avenida1(floresbolsa,esquina)
+    Informar(esquina)
+    Informar(floresbolsa)
+  fin
+variables
+  RobotUno:robot1
+  RobotDos:robot1
+  RobotTres:robot1
+comenzar
+  AsignarArea(RobotUno,ciudad)
+  AsignarArea(RobotTres,ciudad)
+  AsignarArea(RobotDos,ciudad)
+  Iniciar(RobotUno,1,1)
+  Iniciar(RobotDos,3,1)
+  Iniciar(RobotTres,5,1)
+fin

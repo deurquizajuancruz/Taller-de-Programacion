@@ -1,0 +1,70 @@
+programa Punto3APractica2
+procesos
+  proceso juntarPapeles(ES papeles:numero)
+  comenzar
+    repetir 9
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papeles:=papeles + 1
+      mover
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles +1
+  fin
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    repetir 9
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flores:=flores + 1
+      mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores +1
+  fin
+areas
+  areatrabajo:AreaC(1,1,20,5)
+robots
+  robot juntador1
+  variables
+    f,p:numero
+  comenzar
+    f:=0
+    p:=0
+    derecha
+    si (PosCa=1)
+      juntarPapeles(p)
+      EnviarMensaje(p,RobotA2)
+    sino
+      juntarFlores(f)
+      EnviarMensaje(f,RobotB2)
+  fin
+  robot juntador2
+  variables
+    f,p:numero
+  comenzar
+    derecha
+    si (PosCa=1)
+      RecibirMensaje(p,RobotA1)
+      juntarPapeles(p)
+      Informar(p)
+    sino
+      RecibirMensaje(f,RobotB1)
+      juntarFlores(f)
+      Informar(f)
+  fin
+variables
+  RobotA1:juntador1
+  RobotA2:juntador2
+  RobotB1:juntador1
+  RobotB2:juntador2
+comenzar
+  AsignarArea(RobotA1,areatrabajo)
+  AsignarArea(RobotA2,areatrabajo)
+  AsignarArea(RobotB1,areatrabajo)
+  AsignarArea(RobotB2,areatrabajo)
+  Iniciar(RobotA1,1,1)
+  Iniciar(RobotA2,11,1)
+  Iniciar(RobotB1,1,5)
+  Iniciar(RobotB2,11,5)
+fin

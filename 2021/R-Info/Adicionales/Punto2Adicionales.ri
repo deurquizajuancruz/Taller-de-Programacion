@@ -1,0 +1,83 @@
+programa Punto2Adicionales
+procesos
+  proceso juntarpapeles (ES papeles:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles +1
+  fin
+  proceso mandarid
+  comenzar
+    EnviarMensaje(1,uno)
+    EnviarMensaje(2,dos)  
+  fin
+areas
+  papelero1:AreaP(1,4,1,4)
+  papelero2:AreaP(1,5,1,5)
+  elcoordinador:AreaP(1,1,1,1)
+  rectangulo:AreaPC(4,4,44,54)
+robots
+  robot papeleros
+  variables
+    papeles,volver,oportunidades,id,avenida,calle:numero
+    posicion:boolean
+  comenzar
+    papeles:=0
+    volver:=PosCa
+    RecibirMensaje(id,tres)
+    RecibirMensaje(oportunidades,tres)
+    repetir oportunidades
+      Random(avenida,4,44)
+      Random(calle,4,54)
+      BloquearEsquina(avenida,calle)
+      Pos(avenida,calle)
+      juntarpapeles(papeles)
+      Pos(1,volver)
+      LiberarEsquina(avenida,calle)
+  EnviarMensaje(id,tres)
+  EnviarMensaje(papeles,tres)
+  RecibirMensaje(posicion,tres)
+  si (posicion)
+    Pos(4,4)
+  fin
+  robot coordinador
+  variables
+    max,maxid,id,papeles,oportunidades:numero
+  comenzar
+    max:=0
+    mandarid
+    Random(oportunidades,4,9)
+    EnviarMensaje(oportunidades,uno)
+    Random(oportunidades,4,9)
+    EnviarMensaje(oportunidades,dos)
+    repetir 2
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(papeles,uno)
+      sino
+        RecibirMensaje(papeles,dos)
+      si (papeles>max)
+        max:=papeles
+        maxid:=id
+    Informar(maxid)
+    si (maxid=1)
+      EnviarMensaje(V,uno)
+      EnviarMensaje(F,dos)
+    sino
+      EnviarMensaje(F,uno)
+      EnviarMensaje(V,dos)
+  fin
+variables
+  uno:papelero1
+  dos:papelero2
+  tres:coordinador
+comenzar
+  AsignarArea(uno,papelero1)
+  AsignarArea(uno,rectangulo)
+  AsignarArea(dos,papelero2)
+  AsignarArea(dos,rectangulo)
+  AsignarArea(tres,elcoordinador)
+  Iniciar(uno,1,4)
+  Iniciar(dos,1,5)
+  Iniciar(tres,1,1)
+fin

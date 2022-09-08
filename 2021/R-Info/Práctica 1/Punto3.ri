@@ -1,0 +1,55 @@
+programa Punto3Practica1
+procesos
+  proceso Arriba
+  comenzar
+    repetir 2
+      derecha
+  fin
+  proceso Escalon(E longitud:numero;ES papeles:numero;ES flores:numero)
+  comenzar
+    repetir 2
+      repetir longitud
+        mientras (HayFlorEnLaEsquina)
+          tomarFlor
+          flores:=flores + 1
+        mientras (HayPapelEnLaEsquina)
+          tomarPapel
+          papeles:=papeles +1
+        mientras (HayPapelEnLaBolsa)
+          depositarPapel
+        mientras (HayFlorEnLaBolsa)
+          depositarFlor
+        mover
+      derecha
+  fin
+areas
+  ciudad:AreaC(1,1,100,100)
+robots
+  robot robot1
+  variables
+    long,pap,flo,maspapeles:numero
+  comenzar
+    maspapeles:=0
+    long:=1
+    repetir 4
+      pap:=0
+      flo:=0
+      Escalon(long,pap,flo)
+      Arriba
+      si (pap=(flo+1))
+        maspapeles:=maspapeles+1
+      long:=long+1
+    Informar(maspapeles)
+  fin
+variables
+  RobotUno:robot1
+  RobotDos:robot1
+  RobotTres:robot1
+comenzar
+  AsignarArea(RobotUno,ciudad)
+  AsignarArea(RobotDos,ciudad)
+  AsignarArea(RobotTres,ciudad)
+  Iniciar(RobotUno,12,14)
+  Iniciar(RobotDos,17,10)
+  Iniciar(RobotTres,22,6)
+fin

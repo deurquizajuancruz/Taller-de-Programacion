@@ -1,0 +1,62 @@
+programa Practica27
+procesos
+  proceso juntar(ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f +1
+  fin
+  proceso Posicion (ES flo:numero)
+  variables
+    rAv,rCa,miCa,miAv:numero
+  comenzar
+    miAv:= PosAv
+    miCa:= PosCa
+    Random(rAv,1,5)
+    Random(rCa,1,5)
+    rAv:= rAv + miAv
+    rCa:= rCa + miCa
+    Pos(rAv,rCa)
+    Juntar(flo)
+    Pos(miAv,miCa)
+  fin
+areas
+  area1: AreaP(2,2,7,7)
+  area2: AreaP(8,2,13,7)
+  area3: AreaP(14,2,19,7)
+  areaJ: AreaP(1,1,1,1)
+robots
+  robot Juntador
+  variables
+    flo:numero
+  comenzar
+    flo:=0
+    repetir 3
+      Posicion(flo)
+    EnviarMensaje(flo,robot4)
+  fin
+  robot Jefe
+  variables
+    total,flo:numero
+  comenzar
+    total:=0
+    repetir 3
+      RecibirMensaje(flo,*)
+      total:= total + flo
+    Informar('Flores_totales',total)
+  fin
+variables
+  robot1: Juntador
+  robot2: Juntador
+  robot3: Juntador
+  robot4: Jefe
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot3,area3)
+  AsignarArea(robot4,areaJ)
+  Iniciar(robot4,1,1)
+  Iniciar(robot1,2,2)
+  Iniciar(robot2,8,2)
+  Iniciar(robot3,14,2)
+fin

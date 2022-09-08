@@ -1,0 +1,87 @@
+programa Punto1Concurrente
+procesos
+  proceso juntarPapeles (ES papeles:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles +1
+  fin
+  proceso mandarID
+  comenzar
+    EnviarMensaje(1,uno)
+    EnviarMensaje(2,dos)
+  fin
+  proceso ganador(E idmax:numero)
+  comenzar
+    Informar(idmax)
+    si (idmax=1)
+      EnviarMensaje(V,uno)
+      EnviarMensaje(F,dos)
+    sino
+      EnviarMensaje(F,uno)
+      EnviarMensaje(V,dos)
+  fin
+areas
+  papelero1:AreaP(5,1,5,1)
+  papelero2:AreaP(6,1,6,1)
+  coordinador:AreaP(7,1,7,1)
+  cuadrado:AreaPC(5,5,25,25)
+robots
+  robot papeleros
+  variables
+    volver,papeles,id,oportunidades,avenida,calle:numero
+    posicionarse:boolean
+  comenzar
+    papeles:=0
+    volver:=PosAv
+    RecibirMensaje(id,tres)
+    RecibirMensaje(oportunidades,tres)
+    repetir oportunidades
+      Random(avenida,5,25)
+      Random(calle,5,25)
+      BloquearEsquina(avenida,calle)
+      Pos(avenida,calle)
+      juntarPapeles(papeles)
+      Pos(volver,1)
+      LiberarEsquina(avenida,calle)
+    EnviarMensaje(id,tres)
+    EnviarMensaje(papeles,tres)
+    RecibirMensaje(posicionarse,tres)
+    si (posicionarse)
+      Pos(5,5)
+  fin
+  robot coordinador
+  variables
+    oportunidades,papeles,max,id,idmax:numero
+  comenzar
+    max:=0
+    mandarID
+    Random(oportunidades,2,7)
+    EnviarMensaje(oportunidades,uno)
+    Random(oportunidades,2,7)
+    EnviarMensaje(oportunidades,dos)
+    repetir 2
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(papeles,uno)
+      sino
+        RecibirMensaje(papeles,dos)
+      si (papeles>max)
+        max:=papeles
+        idmax:=id
+    ganador(idmax)
+  fin
+variables
+  uno:papeleros
+  dos:papeleros
+  tres:coordinador
+comenzar
+  AsignarArea(uno,papelero1)
+  AsignarArea(uno,cuadrado)
+  AsignarArea(dos,papelero2)
+  AsignarArea(dos,cuadrado)
+  AsignarArea(tres,coordinador)
+  Iniciar(uno,5,1)
+  Iniciar(dos,6,1)
+  Iniciar(tres,7,1)
+fin

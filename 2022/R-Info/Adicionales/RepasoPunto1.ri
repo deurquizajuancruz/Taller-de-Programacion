@@ -1,0 +1,119 @@
+programa punto1Repaso
+procesos
+  proceso recolectarFlores
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso posicion(E avenida:numero;E calle:numero;E vuelta:numero)
+  comenzar
+    Pos(avenida,calle)
+    recolectarFlores
+    Pos(vuelta,1)
+  fin
+  proceso agarrarPapel(E vuelta:numero)
+  comenzar
+    Pos(13,13)
+    tomarPapel
+    Pos(vuelta,1)
+  fin
+  proceso dejarPapel(E avenida:numero;E calle:numero;E vuelta:numero)
+  comenzar
+    Pos(avenida,calle)
+    depositarPapel
+    Pos(vuelta,1)
+  fin
+  proceso equipoflores(ES equipo:numero; E vuelta:numero)
+  comenzar
+    si (vuelta=2)
+      equipo:=1
+    sino
+      equipo:=2
+  fin
+  proceso equipopapeles(ES equipo:numero; E vuelta:numero)
+  comenzar
+    si (vuelta=3)
+      equipo:=1
+    sino
+      equipo:=2
+  fin
+areas
+  Ajefe:AreaP(1,1,1,1)
+  Aequipo1:AreaPC(2,2,12,12)
+  Aequipo2:AreaPC(14,2,24,12)
+  ArecolectorFlores1:AreaP(2,1,2,1)
+  ArecolectorFlores2:AreaP(14,1,14,1)
+  AdepositadorPapeles1:AreaP(3,1,3,1)
+  AdepositadorPapeles2:AreaP(15,1,15,1)
+  AfuentePapeles:AreaPC(13,13,13,13)
+robots
+  robot recolector
+  variables
+    avenida,calle,vuelta,equipo:numero
+  comenzar
+    vuelta:=PosAv
+    equipoflores(equipo,vuelta)
+    repetir 3
+      Random(avenida,0,10)
+      avenida:= PosAv + avenida
+      Random(calle,1,11)
+      calle:= PosCa + calle
+      BloquearEsquina(avenida,calle)
+      posicion(avenida,calle,vuelta)
+      LiberarEsquina(avenida,calle)
+    EnviarMensaje(equipo,RobotJefe)
+  fin
+  robot depositador
+  variables
+    avenida,calle,vuelta,equipo:numero
+  comenzar
+    vuelta:=PosAv
+    equipopapeles(equipo,vuelta)
+    repetir 5
+      BloquearEsquina(13,13)
+      agarrarPapel(vuelta)
+      LiberarEsquina(13,13)
+      Random(avenida,-1,9)
+      avenida:=PosAv + avenida
+      Random(calle,1,11)
+      calle:=PosCa + calle
+      BloquearEsquina(avenida,calle)
+      dejarPapel(avenida,calle,vuelta)
+      LiberarEsquina(avenida,calle)
+    EnviarMensaje(equipo,RobotJefe)
+  fin
+  robot jefe
+  variables
+    equipo:numero
+  comenzar
+    repetir 4
+      RecibirMensaje(equipo,*)
+    si (equipo=2)
+      Informar('el_equipo_ganador_es_el',equipo - 1)
+    sino
+      Informar('el_equipo_ganador_es_el',equipo + 1)
+  fin
+variables
+  recolectorFlores1:recolector
+  recolectorFlores2:recolector
+  depositadorPapeles1:depositador
+  depositadorPapeles2:depositador
+  RobotJefe: jefe
+comenzar
+  AsignarArea(recolectorFlores1, Aequipo1)
+  AsignarArea(recolectorFlores1, ArecolectorFlores1)
+  AsignarArea(recolectorFlores2, Aequipo2)
+  AsignarArea(recolectorFlores2, ArecolectorFlores2)
+  AsignarArea(depositadorPapeles1, Aequipo1)
+  AsignarArea(depositadorPapeles1, AdepositadorPapeles1)
+  AsignarArea(depositadorPapeles1, AfuentePapeles)
+  AsignarArea(depositadorPapeles2, Aequipo2)
+  AsignarArea(depositadorPapeles2, AdepositadorPapeles2)
+  AsignarArea(depositadorPapeles2, AfuentePapeles)
+  AsignarArea(RobotJefe, Ajefe)
+  Iniciar(RobotJefe, 1, 1)
+  Iniciar(recolectorFlores1, 2, 1)
+  Iniciar(recolectorFlores2, 14, 1)
+  Iniciar(depositadorPapeles1, 3, 1)
+  Iniciar(depositadorPapeles2, 15, 1)
+fin

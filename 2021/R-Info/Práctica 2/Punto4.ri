@@ -1,0 +1,103 @@
+programa Punto4Practica2
+procesos
+  proceso limpiar(ES cantidad:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      cantidad:=cantidad + 1
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      cantidad:=cantidad + 1  
+  fin
+  proceso elegirrobot
+  variables
+    identificador:numero
+  comenzar
+    Random(identificador,1,4)
+    si (identificador=1)
+      EnviarMensaje(V,RobotUno)
+    sino
+      si (identificador=2)
+        EnviarMensaje(V,RobotDos)
+      sino
+        si (identificador=3)
+          EnviarMensaje(V,RobotTres)
+        sino
+          EnviarMensaje(V,RobotCuatro)
+  fin
+areas
+  fisca:AreaP(1,1,1,1)
+  cuadrante:AreaPC(25,25,75,75)
+  inicio:AreaPC(25,1,40,1)
+robots
+  robot recolector
+  variables
+    volver,cantidad,avenida,calle,quiensoy,ganador:numero
+    entrar:boolean
+  comenzar
+    cantidad:=0
+    RecibirMensaje(quiensoy,RobotCinco)
+    volver:=PosAv
+    RecibirMensaje(entrar,RobotCinco)
+    mientras (entrar)
+      Random(avenida,25,75)
+      Random(calle,25,75)
+      Pos(avenida,calle)
+      limpiar(cantidad)
+      EnviarMensaje(quiensoy,RobotCinco)
+      EnviarMensaje(cantidad,RobotCinco)
+      Pos(volver,1)
+      RecibirMensaje(entrar,RobotCinco)
+    RecibirMensaje(ganador,RobotCinco)
+    si (ganador=quiensoy)
+      Pos(50,50) 
+  fin
+  robot fiscalizador
+  variables
+    accesos,f,p,max,ganador,quienEs,cantidad:numero
+  comenzar
+    accesos:=0
+    max:=0
+    EnviarMensaje(1,RobotUno)
+    EnviarMensaje(2,RobotDos)
+    EnviarMensaje(3,RobotTres)
+    EnviarMensaje(4,RobotCuatro)
+    repetir 10
+      elegirrobot
+      RecibirMensaje(quienEs,*)
+      RecibirMensaje(cantidad,*)
+      si (cantidad>max)
+        max:=cantidad
+        ganador:=quienEs
+    EnviarMensaje(F,RobotUno)
+    EnviarMensaje(F,RobotDos)
+    EnviarMensaje(F,RobotTres)
+    EnviarMensaje(F,RobotCuatro)
+    EnviarMensaje(ganador,RobotUno)
+    EnviarMensaje(ganador,RobotDos)
+    EnviarMensaje(ganador,RobotTres)
+    EnviarMensaje(ganador,RobotCuatro)
+  fin
+variables
+  RobotUno:recolector
+  RobotDos:recolector
+  RobotTres:recolector
+  RobotCuatro:recolector
+  RobotCinco:fiscalizador
+comenzar
+  AsignarArea(RobotUno,cuadrante)
+  AsignarArea(RobotUno,inicio)
+  AsignarArea(RobotDos,cuadrante)
+  AsignarArea(RobotDos,inicio)
+  AsignarArea(RobotTres,cuadrante)
+  AsignarArea(RobotTres,inicio)
+  AsignarArea(RobotCuatro,cuadrante)
+  AsignarArea(RobotCuatro,inicio)
+  AsignarArea(RobotCinco,fisca)
+  Iniciar(RobotUno,25,1)
+  Iniciar(RobotDos,30,1)
+  Iniciar(RobotTres,35,1)
+  Iniciar(RobotCuatro,40,1)
+  Iniciar(RobotCinco,1,1)
+fin
+  

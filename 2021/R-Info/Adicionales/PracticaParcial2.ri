@@ -1,0 +1,99 @@
+programa PracticaParcial2
+procesos
+  proceso juntar(ES flores:numero; ES papeles:numero)
+  comenzar
+    flores:=0
+    papeles:=0
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles + 1
+    repetir flores
+      depositarFlor
+    repetir papeles
+      depositarPapel
+  fin
+  proceso juntarPapeles
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso enviarid
+  comenzar
+    EnviarMensaje(1,RobotUno)
+    EnviarMensaje(2,RobotDos) 
+  fin
+areas
+  arealimpiador:AreaP(1,30,100,30)
+  areajefe:AreaP(1,1,1,1)
+  areacorredor1:AreaP(35,1,35,79)
+  areacorredor2:AreaP(45,1,45,79)
+robots
+  robot corredor
+  variables
+    masdeuna,flores,papeles,pasos,id:numero
+  comenzar
+    masdeuna:=0
+    RecibirMensaje(id,RobotCuatro)
+    mientras(PosCa<60)
+      Random(pasos,2,20)
+      repetir pasos
+        juntar(flores,papeles)
+        si ((flores>=1) & (papeles>=1))
+          masdeuna:=masdeuna + 1
+        si (PosCa=29)
+          BloquearEsquina(PosAv,30)
+        sino
+          si (PosCa=31)
+            LiberarEsquina(PosAv,30)
+        mover
+    EnviarMensaje(id,RobotCuatro)
+    EnviarMensaje(masdeuna,RobotCuatro)
+  fin
+  robot limpiador
+  comenzar
+    derecha
+    repetir 99
+      juntarPapeles
+      si ((PosAv=34) | (PosAv=44))
+        BloquearEsquina((PosAv + 1),30)
+      sino
+        si ((PosAv=36) | (PosAv=46))
+          LiberarEsquina((PosAv - 1),30)
+      mover
+    juntarPapeles
+  fin
+  robot jefe
+  variables
+    id,cantuno,cantdos:numero
+  comenzar
+    enviarid
+    repetir 2
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(cantuno,RobotUno)
+      sino
+        RecibirMensaje(cantdos,RobotDos)
+    si (id=1)
+      Informar('Primero',(id + 1))
+      Informar('Esquinas',cantdos)
+    sino
+      Informar('Primero',(id - 1 ))
+      Informar('Esquinas',cantuno)
+  fin
+variables
+  RobotUno,RobotDos:corredor
+  RobotTres:limpiador
+  RobotCuatro:jefe
+comenzar
+  AsignarArea(RobotUno,areacorredor1)
+  AsignarArea(RobotDos,areacorredor2)
+  AsignarArea(RobotTres,arealimpiador)
+  AsignarArea(RobotCuatro,areajefe)
+  Iniciar(RobotUno,35,1)
+  Iniciar(RobotDos,45,1)
+  Iniciar(RobotTres,1,30)
+  Iniciar(RobotCuatro,1,1)
+fin

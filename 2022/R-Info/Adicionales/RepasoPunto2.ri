@@ -1,0 +1,100 @@
+programa RepasoPunto2
+procesos
+  proceso posicion(ES id:numero)
+  comenzar
+    si ((PosAv=2) | (PosAv=3))
+      id:=1
+      BloquearEsquina(5,5)
+      Pos(5,5)
+    sino
+      id:=2
+      BloquearEsquina(25,5)
+      Pos(25,5)
+  fin
+  proceso flores
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso papeles
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+areas
+  Afiscalizador:AreaP(1,1,1,1)
+  ARobot1E1:AreaP(2,1,2,1)
+  ARobot2E1:AreaP(3,1,3,1)
+  ARobot1E2:AreaP(4,1,4,1)
+  ARobot2E2:AreaP(5,1,5,1)
+  AInicio1:AreaPC(5,5,5,5)
+  AInicio2:AreaPC(25,5,25,5)
+  AaristaR1E1:AreaP(5,6,5,15)
+  AaristaR2E1:AreaP(6,5,20,5)
+  AaristaR1E2:AreaP(25,6,25,15)
+  AaristaR2E2:AreaP(26,5,40,5)
+robots
+  robot juntadorFlores
+  variables
+    id:numero
+  comenzar
+    posicion(id)
+    flores
+    mover
+    LiberarEsquina(PosAv, PosCa - 1)
+    repetir 9
+      flores
+      mover
+    EnviarMensaje(id,fiscal)
+  fin
+  robot juntadorPapeles
+  variables
+    id:numero
+  comenzar
+    posicion(id)
+    papeles
+    derecha
+    mover
+    LiberarEsquina(PosAv - 1,PosCa)
+    repetir 14
+      papeles
+      mover
+    EnviarMensaje(id,fiscal)
+  fin
+  robot jefe
+  variables
+    id:numero
+  comenzar
+    repetir 4
+      RecibirMensaje(id,*)
+    si (id=1)
+      Informar('El_equipo_ganador_es_el',id + 1)
+    sino
+      Informar('El_equipo_ganador_es_el',id - 1)
+  fin
+variables
+  R1E1:juntadorFlores
+  R2E1:juntadorPapeles
+  R1E2:juntadorFlores
+  R2E2:juntadorPapeles
+  fiscal:jefe
+comenzar
+  AsignarArea(R1E1,ARobot1E1)
+  AsignarArea(R1E1,AInicio1)
+  AsignarArea(R1E1,AaristaR1E1)
+  AsignarArea(R2E1,ARobot2E1)
+  AsignarArea(R2E1,AInicio1)
+  AsignarArea(R2E1,AaristaR2E1)
+  AsignarArea(R1E2,ARobot1E2)
+  AsignarArea(R1E2,AInicio2)
+  AsignarArea(R1E2,AaristaR1E2)
+  AsignarArea(R2E2,ARobot2E2)
+  AsignarArea(R2E2,AInicio2)
+  AsignarArea(R2E2,AaristaR2E2)
+  AsignarArea(fiscal,Afiscalizador)
+  Iniciar(R1E1,2,1)
+  Iniciar(R2E1,3,1)
+  Iniciar(R1E2,4,1)
+  Iniciar(R2E2,5,1)
+  Iniciar(fiscal,1,1)
+fin

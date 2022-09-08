@@ -1,0 +1,94 @@
+program deUrquiza;
+const
+	diml=3500;
+type
+	subrango=1..10;
+	pedido=record
+		dia:integer;
+		nropedido:integer;
+		dnicliente:integer;
+		monto:real;
+		puntoenvio:subrango;
+	end;
+	lista=^nodo;
+	nodo=record
+		elem:pedido;
+		sig:lista;
+	end;
+	vpedidos=array[subrango] of lista;
+	clientes=record
+		dni:integer;
+		direccion:String;
+		telefono:integer;
+	end;
+	vclientes=array[1..diml] of clientes;
+
+procedure cargarpedidos(var v:vpedidos); // SE DISPONE
+begin end; 
+
+procedure ordenarvector(var v:vclientes);
+var
+	g:clientes;
+	i,j,p:integer;
+begin
+	for i:= 1 to (diml-1) do begin
+		p:=i;
+		for j:=(i+1) to diml do begin
+			if (v[j].dni<v[p].dni) then p:=j;
+		end;
+		g:=v[p];v[p]:=v[i];v[i]:=g;
+	end;
+end;
+
+procedure maximo(var v:vpedidos;var x:pedido);
+var
+	i,pos:integer;
+begin
+	x.monto:=-9999;pos:=-1;
+	for i:=1 to 10 do begin
+		if ((v[i]<>nil) and (v[i]^.elem.monto>x.monto)) then begin
+			pos:=i;x.dnicliente:=v[i]^.elem.dnicliente;x.monto:=v[i]^.elem.monto;
+		end;
+	end;
+	if (pos<>-1) then begin
+		x.dia:=v[pos]^.elem.dia;x.nropedido:=v[i]^.elem.nropedido;v[pos]:=v[pos]^.sig;
+	end;
+end;
+
+function buscarvector(vc:vclientes;dni,i:integer):integer;
+begin
+	if (i>3500) then buscarvector:=-1
+	else if (vc[i].dni>dni) then buscarvector:=-1
+	else if (vc[i].dni=dni) then buscarvector:=vc[i].telefono
+	else buscarvector:=buscarvector(vc,dni,(i+1));
+end;
+
+procedure merge (vp:vpedidos;vc:vclientes);
+var
+	max,actual:pedido;
+	num:integer;
+begin
+	maximo(vp,max);
+	while (max.monto<>-9999) do begin
+		actual.dia:=max.dia;
+		while ((max.monto<>-9999) and (actual.dia=max.dia)) do begin
+			actual.monto:=max.monto;actual.nropedido:=max.nropedido;maximo(vp,max);
+		end;
+		num:=buscarvector(vc,actual.dnicliente,1);
+		if (num<>-1) then begin
+			writeln('Dia: ',actual.dia, ' DNI: ',actual.dnicliente, ' Nro pedido: ',actual.nropedido, ' Telefono: ',num);
+		end
+		else begin
+			writeln('Dia: ',actual.dia, ' Premio vacante.');
+		end;
+	end;
+end;
+
+var
+	vp:vpedidos;
+	vc:vclientes;
+begin
+	cargarpedidos(vp);
+	ordenarvector(vc); //INCISO A
+	merge(vp,vc); // INCISO B
+end.

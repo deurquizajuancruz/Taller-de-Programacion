@@ -1,0 +1,82 @@
+programa Punto4APractica3
+procesos
+  proceso identificacion
+  comenzar
+    EnviarMensaje(1,RobotUno)
+    EnviarMensaje(2,RobotDos)
+    EnviarMensaje(3,RobotTres)
+    EnviarMensaje(4,RobotCuatro)
+  fin
+areas
+  coordina:AreaP(1,1,1,1)
+  inicio:AreaPC(9,9,9,12)
+  esquinas:AreaPC(10,10,11,11)
+robots
+  robot movedor
+  variables
+    id,volver:numero
+    seguir:boolean
+  comenzar
+    volver:=PosCa
+    seguir:=V
+    RecibirMensaje(id,RobotCinco)
+    mientras (seguir)
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      si (HayFlorEnLaEsquina)
+        tomarFlor
+        BloquearEsquina(11,11)
+        Pos(11,11)
+        LiberarEsquina(10,10)
+        depositarFlor
+        Pos(9,volver)
+        LiberarEsquina(11,11)
+      sino
+        seguir:=F
+        Pos(9,volver)
+        LiberarEsquina(10,10)
+      EnviarMensaje(seguir,RobotCinco)
+      EnviarMensaje(id,RobotCinco)
+  fin
+  robot coordinador
+  variables
+    id:numero
+    seguir:boolean
+  comenzar
+    seguir:=V
+    identificacion
+    mientras(seguir)
+      repetir 4
+        RecibirMensaje(seguir,*)
+        RecibirMensaje(id,*)
+    Informar(id)
+    BloquearEsquina(11,11)
+    Pos(11,11)
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+    Pos(1,1)
+    LiberarEsquina(11,11)
+  fin
+variables
+  RobotUno:movedor
+  RobotDos:movedor
+  RobotTres:movedor
+  RobotCuatro:movedor
+  RobotCinco:coordinador
+comenzar
+  AsignarArea(RobotUno,inicio)
+  AsignarArea(RobotUno,esquinas)
+  AsignarArea(RobotDos,inicio)
+  AsignarArea(RobotDos,esquinas)
+  AsignarArea(RobotTres,inicio)
+  AsignarArea(RobotTres,esquinas)
+  AsignarArea(RobotCuatro,inicio)
+  AsignarArea(RobotCuatro,esquinas)
+  AsignarArea(RobotCinco,esquinas)
+  AsignarArea(RobotCinco,coordina)
+  Iniciar(RobotUno,9,9)
+  Iniciar(RobotDos,9,10)
+  Iniciar(RobotTres,9,11)
+  Iniciar(RobotCuatro,9,12)
+  Iniciar(RobotCinco,1,1)
+fin

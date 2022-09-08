@@ -1,0 +1,85 @@
+programa ParcialViejo2
+procesos
+  proceso identificacion(ES id:numero)
+  comenzar
+    si (PosCa=4)
+      id:=1
+    sino
+      id:=2
+  fin
+  proceso agarrar(ES papeles:numero; E av:numero;E ca:numero;E inicio:numero)
+  comenzar
+    Pos(av,ca)
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles + 1
+    Pos(1,inicio)
+  fin
+areas
+  Apapeles:AreaPC(4,4,53,43)
+  Acoordinador:AreaP(1,1,1,1)
+  Apapelero1:AreaP(1,4,1,4)
+  Apapelero2:AreaP(1,5,1,5)
+robots
+  robot papelero
+  variables
+    inicio,av,ca,oportunidades,id,papeles:numero
+    posicion:boolean
+  comenzar
+    inicio:=PosCa
+    posicion:=F
+    papeles:=0
+    identificacion(id)
+    RecibirMensaje(oportunidades,jefe)
+    repetir oportunidades
+      Random(av,4,53)
+      Random(ca,4,43)
+      BloquearEsquina(av,ca)
+      agarrar(papeles,av,ca,inicio)
+      LiberarEsquina(av,ca)
+    EnviarMensaje(id,jefe)
+    EnviarMensaje(papeles,jefe)
+    RecibirMensaje(posicion,jefe)
+    si (posicion)
+      Pos(4,4)
+  fin
+  robot coordinador
+  variables
+    oportunidades,idmenor,id,papeles,min:numero
+  comenzar
+    min:=999
+    Random(oportunidades,4,9)
+    EnviarMensaje(oportunidades,Robot1)
+    Random(oportunidades,4,9)
+    EnviarMensaje(oportunidades,Robot2)
+    repetir 2
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(papeles,Robot1)
+      sino
+        RecibirMensaje(papeles,Robot2)
+      si (papeles<min)
+        min:=papeles
+        idmenor:=id
+    Informar('el_robot_que_junto_menos_papeles_es',idmenor)
+    si (idmenor=1)
+      EnviarMensaje(V,Robot1)
+      EnviarMensaje(F,Robot2)
+    sino
+      EnviarMensaje(F,Robot1)
+      EnviarMensaje(V,Robot2)
+  fin
+variables
+  Robot1:papelero
+  Robot2:papelero
+  jefe:coordinador
+comenzar
+  AsignarArea(Robot1, Apapeles)
+  AsignarArea(Robot1, Apapelero1)
+  AsignarArea(Robot2, Apapeles)
+  AsignarArea(Robot2, Apapelero2)
+  AsignarArea(jefe,Acoordinador)
+  Iniciar(Robot1, 1,4)
+  Iniciar(Robot2,1,5)
+  Iniciar(jefe,1,1)
+fin

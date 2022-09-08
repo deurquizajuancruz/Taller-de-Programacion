@@ -1,0 +1,71 @@
+programa Punto2Practica2
+procesos
+  proceso Izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso hacerEscalon(E alto:numero;ES flores:numero;ES papeles:numero)
+  comenzar
+    repetir alto
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flores:=flores +1
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papeles:=papeles +1
+      mover
+    derecha
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores +1
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles +1
+    mover
+    Izquierda
+  fin
+areas
+  areatrabajo:AreaC(1,1,16,21)
+robots
+  robot escalador
+  variables
+    f,p,alto,masfp:numero
+  comenzar
+    masfp:=0
+    f:=0
+    p:=0
+    repetir 4
+      Random(alto,1,5)
+      hacerEscalon(alto,f,p)
+      si (f>p)
+        masfp:=masfp + 1
+      f:=0
+      p:=0
+    EnviarMensaje(masfp,RobotCuatro)
+  fin
+  robot jefe
+  variables
+    cantidad,masflores:numero
+  comenzar
+    cantidad:=0
+    repetir 3
+      RecibirMensaje(masflores,*)
+      cantidad:=cantidad + masflores
+    Informar(cantidad)
+  fin
+variables
+  RobotUno:escalador
+  RobotDos:escalador
+  RobotTres:escalador
+  RobotCuatro:jefe
+comenzar
+  AsignarArea(RobotUno,areatrabajo)
+  AsignarArea(RobotDos,areatrabajo)
+  AsignarArea(RobotTres,areatrabajo)
+  AsignarArea(RobotCuatro,areatrabajo)
+  Iniciar(RobotUno,2,1)
+  Iniciar(RobotDos,7,1)
+  Iniciar(RobotTres,12,1)
+  Iniciar(RobotCuatro,1,1)
+fin

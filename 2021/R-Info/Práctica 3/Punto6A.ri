@@ -1,0 +1,169 @@
+programa Punto6APractica3
+procesos
+  proceso agarrarFlor (ES flores:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores + 1
+  fin
+  proceso agarrarPapel(ES papeles:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles + 1
+  fin
+  proceso recorrido1(ES flores:numero)
+  comenzar
+    repetir 6
+      si ((PosAv=4) & (PosCa=8))
+        BloquearEsquina(5,8)
+      si ((PosAv=6) & (PosCa=8))
+        LiberarEsquina(5,8)
+      si ((PosAv=8) & (PosCa=6))
+        BloquearEsquina(8,5)
+      si ((PosAv=8) & (PosCa=4))
+        LiberarEsquina(8,5)
+      agarrarFlor(flores)
+      mover
+  fin
+  proceso recorrido2(ES papeles:numero;ES flores:numero)
+  comenzar
+    repetir 10
+      si ((PosAv=5) & (PosCa=7))
+        BloquearEsquina(5,8)
+      si ((PosAv=5) & (PosCa=9))
+        LiberarEsquina(5,8)
+      si ((PosAv=9) & (PosCa=5))
+        BloquearEsquina(8,5)
+      si ((PosAv=7) & (PosCa=5))
+        LiberarEsquina(8,5)
+      si ((PosAv=8) & (PosCa=15))
+        BloquearEsquina(9,15)
+      si ((PosAv=10) & (PosCa=15))
+        LiberarEsquina(9,15)
+      si ((PosAv=15) & (PosCa=10))
+        BloquearEsquina(15,9)
+      si ((PosAv=15) & (PosCa=8))
+        LiberarEsquina(15,9)
+      agarrarFlor(flores)
+      agarrarPapel(papeles)
+      mover
+  fin
+  proceso recorrido3(ES papeles:numero)
+  comenzar
+    repetir 7
+      si ((PosAv=8) & (PosCa=15))
+        BloquearEsquina(9,15)
+      si ((PosAv=10) & (PosCa=15))
+        LiberarEsquina(9,15)
+      si ((PosAv=16) & (PosCa=9))
+        BloquearEsquina(15,9)
+      si ((PosAv=14) & (PosCa=9))
+        LiberarEsquina(15,9)
+      agarrarPapel(papeles)
+      mover
+  fin
+  proceso identificacion
+  comenzar
+    EnviarMensaje(1,uno)
+    EnviarMensaje(2,dos)
+    EnviarMensaje(3,tres)
+  fin
+areas
+  fisca:AreaP(1,1,1,1)
+  cuadrantes:AreaPC(2,2,16,16)
+  recorrido:AreaPC(1,20,100,22)
+robots
+  robot robot1
+  variables
+    f,id,calle:numero
+  comenzar
+    f:=0
+    RecibirMensaje(id,cuatro)
+    repetir 4
+      recorrido1(f)
+      derecha
+    EnviarMensaje(id,cuatro)
+    RecibirMensaje(calle,cuatro)
+    Pos(1,calle)
+    derecha
+    mientras ((f>0) & (PosAv<100))
+      depositarFlor
+      mover
+      f:=(f - 1)
+  fin
+  robot robot2
+  variables
+    p,f,id,calle:numero
+  comenzar
+    p:=0
+    f:=0
+    RecibirMensaje(id,cuatro)
+    repetir 4
+      recorrido2(p,f)
+      derecha
+    EnviarMensaje(id,cuatro)
+    RecibirMensaje(calle,cuatro)
+    Pos(1,calle)
+    derecha
+    mientras ((p>0) & (f>0) & (PosAv<100))
+      depositarPapel
+      depositarFlor
+      mover
+      p:=(p -1)
+      f:=(f - 1)
+  fin
+  robot robot3
+  variables
+    p,id,calle:numero
+  comenzar
+    p:=0
+    RecibirMensaje(id,cuatro)
+    repetir 4
+      recorrido3(p)
+      derecha
+    EnviarMensaje(id,cuatro)
+    RecibirMensaje(calle,cuatro)
+    Pos(1,calle)
+    derecha
+    mientras ((p>0) & (PosAv<100))
+      depositarPapel
+      mover
+      p:=(p - 1)
+  fin
+  robot fiscalizador
+  variables
+    calle,ids:numero
+    recibir:boolean
+  comenzar
+    calle:=20
+    identificacion
+    repetir 3
+      RecibirMensaje(ids,*)
+      si (ids=1)
+        EnviarMensaje(calle,uno)
+      sino
+        si (ids=2)
+          EnviarMensaje(calle,dos)
+        sino
+          EnviarMensaje(calle,tres)
+      calle:=calle + 1
+  fin
+variables
+  uno:robot1
+  dos:robot2
+  tres:robot3
+  cuatro:fiscalizador
+comenzar
+  AsignarArea(uno,cuadrantes)
+  AsignarArea(uno,recorrido)
+  AsignarArea(dos,cuadrantes)
+  AsignarArea(dos,recorrido)
+  AsignarArea(tres,cuadrantes)
+  AsignarArea(tres,recorrido)
+  AsignarArea(cuatro,fisca)
+  Iniciar(uno,2,2)
+  Iniciar(dos,5,5)
+  Iniciar(tres,9,9)
+  Iniciar(cuatro,1,1)
+fin

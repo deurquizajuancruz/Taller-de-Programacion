@@ -1,0 +1,82 @@
+programa Punto5Practica3
+procesos
+  proceso identificacion
+  comenzar
+    EnviarMensaje(1,uno)
+    EnviarMensaje(2,dos)
+    EnviarMensaje(3,tres)
+    EnviarMensaje(4,cuatro)
+  fin
+areas
+  carrera1:AreaP(4,1,4,100)
+  carrera2:AreaP(6,1,6,100)
+  carrera3:AreaP(8,1,8,100)
+  carrera4:AreaP(10,1,10,100)
+  coordina:AreaP(1,1,1,1)
+  fuente:AreaPC(11,11,11,11)
+robots
+  robot corredor
+  variables
+    id,volvercalle,volveravenida:numero
+    continuar:boolean
+  comenzar
+    RecibirMensaje(id,cinco)
+    continuar:=V
+    volvercalle:=PosCa
+    volveravenida:=PosAv
+    mientras ((continuar)) & ((PosCa<100))
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      si (HayPapelEnLaEsquina)
+        tomarPapel
+        Pos(volveravenida,volvercalle)
+        LiberarEsquina(11,11)
+        depositarPapel
+        mover
+        volvercalle:=volvercalle + 1
+        si (PosCa=100)
+          EnviarMensaje(id,cinco)
+          EnviarMensaje(volvercalle,cinco)
+      sino
+        Pos(volveravenida,volvercalle)
+        LiberarEsquina(11,11)
+        continuar:=F
+        EnviarMensaje(id,cinco)
+        EnviarMensaje(volvercalle,cinco)
+  fin
+  robot coordinador
+  variables
+    max,maslejos,id,ganador:numero
+  comenzar
+    max:=1
+    identificacion
+    repetir 4
+      RecibirMensaje(id,*)
+      RecibirMensaje(maslejos,*)
+      si (maslejos>max)
+        max:=maslejos
+        ganador:=id
+    Informar(ganador)
+  fin
+variables
+  uno:corredor
+  dos:corredor
+  tres:corredor
+  cuatro:corredor
+  cinco:coordinador
+comenzar
+  AsignarArea(uno,carrera1)
+  AsignarArea(uno,fuente)
+  AsignarArea(dos,carrera2)
+  AsignarArea(dos,fuente)
+  AsignarArea(tres,carrera3)
+  AsignarArea(tres,fuente)
+  AsignarArea(cuatro,carrera4)
+  AsignarArea(cuatro,fuente)
+  AsignarArea(cinco,coordina)
+  Iniciar(uno,4,1)
+  Iniciar(dos,6,1)
+  Iniciar(tres,8,1)
+  Iniciar(cuatro,10,1)
+  Iniciar(cinco,1,1)
+fin

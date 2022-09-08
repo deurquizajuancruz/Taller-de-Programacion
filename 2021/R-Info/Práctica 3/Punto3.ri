@@ -1,0 +1,115 @@
+programa Punto3Practica3
+procesos
+  proceso recogerFlor (ES flores:numero)
+  comenzar
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores + 1
+      EnviarMensaje(V,RobotCinco)
+    sino
+      si ~(HayFlorEnLaEsquina)
+        EnviarMensaje(F,RobotCinco)
+  fin
+  proceso elegirrobot
+  variables
+    identificador:numero
+  comenzar
+    Random(identificador,1,4)
+    si (identificador=1)
+      EnviarMensaje(V,RobotUno)
+    sino
+      si (identificador=2)
+        EnviarMensaje(V,RobotDos)
+      sino
+        si (identificador=3)
+          EnviarMensaje(V,RobotTres)
+        sino
+          EnviarMensaje(V,RobotCuatro)
+  fin
+  proceso enviarEsquina
+  variables
+    a,c:numero
+  comenzar
+    Random(a,2,10)
+    Random(c,10,10)
+    EnviarMensaje(a,RobotUno)
+    EnviarMensaje(a,RobotDos)
+    EnviarMensaje(a,RobotTres)
+    EnviarMensaje(a,RobotCuatro)
+    EnviarMensaje(c,RobotUno)
+    EnviarMensaje(c,RobotDos)
+    EnviarMensaje(c,RobotTres)
+    EnviarMensaje(c,RobotCuatro)
+  fin
+areas
+  cuadrante:AreaPC(2,2,10,10)
+  inicio:AreaPC(1,1,5,1)
+robots
+  robot floreros
+  variables
+    volver,f,quiensoy,avenida,calle:numero
+    ejecutar:boolean
+  comenzar
+    f:=0
+    volver:=PosAv
+    RecibirMensaje(quiensoy,RobotCinco)
+    RecibirMensaje(avenida,RobotCinco)
+    RecibirMensaje(calle,RobotCinco)
+    RecibirMensaje(ejecutar,RobotCinco)
+    mientras (ejecutar)
+      Pos(avenida,calle)
+      recogerFlor(f)
+      Pos(volver,1)
+      EnviarMensaje(f,RobotCinco)
+      EnviarMensaje(quiensoy,RobotCinco)
+      RecibirMensaje(ejecutar,RobotCinco)
+  fin
+  robot jefe
+  variables
+    flores,max,ganador,identificador:numero
+    faltan:boolean
+  comenzar
+    max:=0
+    faltan:=V
+    EnviarMensaje(1,RobotUno)
+    EnviarMensaje(2,RobotDos)
+    EnviarMensaje(3,RobotTres)
+    EnviarMensaje(4,RobotCuatro)
+    enviarEsquina
+    mientras (faltan)
+      elegirrobot
+      RecibirMensaje(faltan,*)
+      RecibirMensaje(flores,*)
+      RecibirMensaje(identificador,*)
+      si (flores>max)
+        max:=flores
+        ganador:=identificador
+      si (faltan=F)
+        EnviarMensaje(F,RobotUno)
+        EnviarMensaje(F,RobotDos)
+        EnviarMensaje(F,RobotTres)
+        EnviarMensaje(F,RobotCuatro)
+    Informar(ganador)
+  fin
+variables
+  RobotUno:floreros
+  RobotDos:floreros
+  RobotTres:floreros
+  RobotCuatro:floreros
+  RobotCinco:jefe
+comenzar
+  AsignarArea(RobotUno,cuadrante)
+  AsignarArea(RobotUno,inicio)
+  AsignarArea(RobotDos,cuadrante)
+  AsignarArea(RobotDos,inicio)
+  AsignarArea(RobotTres,cuadrante)
+  AsignarArea(RobotTres,inicio)
+  AsignarArea(RobotCuatro,cuadrante)
+  AsignarArea(RobotCuatro,inicio)
+  AsignarArea(RobotCinco,inicio)
+  Iniciar(RobotUno,2,1)
+  Iniciar(RobotDos,3,1)
+  Iniciar(RobotTres,4,1)
+  Iniciar(RobotCuatro,5,1)
+  Iniciar(RobotCinco,1,1)
+fin

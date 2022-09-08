@@ -1,0 +1,51 @@
+programa Practica3Punto34
+procesos
+  proceso juntarFlores (ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1
+  fin
+  proceso dejar(E f:numero; E av:numero; E ca:numero)
+  comenzar
+    repetir f
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlor
+      Pos(av,ca)
+      LiberarEsquina(10,10)
+  fin
+areas
+  area1:AreaP(15,15,30,35)
+  area2:AreaP(40,40,55,60)
+  area3:AreaPC(10,10,10,10)
+robots
+  robot florero
+  variables
+    f,av,ca:numero
+  comenzar
+    f:=0
+    av:=PosAv
+    ca:=PosCa
+    repetir 2
+      repetir 20
+        juntarFlores(f)
+        mover
+      derecha
+      repetir 15
+        juntarFlores(f)
+        mover
+      derecha
+    dejar(f,av,ca)
+  fin
+variables
+  robot1:florero
+  robot2:florero
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot1,area3)
+  AsignarArea(robot2,area3)
+  Iniciar(robot1, 15, 15)
+  Iniciar(robot2,40,40)
+fin

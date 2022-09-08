@@ -1,0 +1,75 @@
+programa deUrquiza
+procesos 
+  proceso juntarPapeles (ES papeles:numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles + 1
+  fin
+areas
+  rectangulo:AreaPC(4,4,54,44)
+  inicioC:AreaP(1,1,1,1)
+  inicioP:AreaPC(1,4,1,5)
+robots
+  robot papelero
+  variables
+    inicio,id,oportunidades,av,ca,papeles:numero
+    posicion:boolean
+  comenzar
+    posicion:=F
+    papeles:=0
+    inicio:=PosCa
+    RecibirMensaje(id,tres)
+    RecibirMensaje(oportunidades,tres)
+    repetir oportunidades
+      Random(av,4,54)
+      Random(ca,4,44)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarPapeles(papeles)
+      Pos(1,inicio)
+      LiberarEsquina(av,ca)
+    EnviarMensaje(id,tres)
+    EnviarMensaje(papeles,tres)
+    RecibirMensaje(posicion,tres)
+    si (posicion)
+      Pos(4,4)
+  fin
+  robot coordinador
+  variables
+    oportunidades,papeles,id,menor,min:numero
+  comenzar
+    min:=1000
+    EnviarMensaje(1,uno)
+    EnviarMensaje(2,dos)
+    Random(oportunidades,4,9)
+    EnviarMensaje(oportunidades,uno)
+    Random(oportunidades,4,9)
+    EnviarMensaje(oportunidades,dos)
+    repetir 2
+      RecibirMensaje(id,*)
+      RecibirMensaje(papeles,*)
+      si (papeles<min)
+        menor:=id
+        min:=papeles
+    si (menor=1)
+      EnviarMensaje(V,uno)
+      EnviarMensaje(F,dos)
+    sino
+      EnviarMensaje(V,dos)
+      EnviarMensaje(F,uno)
+  fin
+variables
+  uno:papelero
+  dos:papelero
+  tres:coordinador
+comenzar
+  AsignarArea(uno,rectangulo)
+  AsignarArea(uno,inicioP)
+  AsignarArea(dos,rectangulo)
+  AsignarArea(dos,inicioP)
+  AsignarArea(tres,inicioC)
+  Iniciar(uno,1,4)
+  Iniciar(dos,1,5)
+  Iniciar(tres,1,1)
+fin

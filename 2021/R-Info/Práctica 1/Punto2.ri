@@ -1,0 +1,65 @@
+programa Punto2Practica1
+procesos
+  proceso recorrerLado(ES papeles:numero)
+  comenzar
+    repetir 20
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        papeles:=papeles +1
+      mover
+  fin
+areas
+  todaarea:AreaC(10,10,30,30)
+robots
+  robot robot1
+  variables
+    pap: numero
+  comenzar
+    pap:=0
+    recorrerLado(pap)
+    Informar(pap)
+  fin
+  robot robot2
+  variables
+    pap2:numero
+  comenzar
+    pap2:=0
+    derecha
+    recorrerLado(pap2)
+    Informar(pap2)
+  fin
+  robot robot3
+  variables
+    pap3:numero
+  comenzar
+    pap3:=0
+    repetir 2
+      derecha
+    recorrerLado(pap3)
+    Informar(pap3)
+  fin
+  robot robot4
+  variables
+    pap4:numero
+  comenzar
+    pap4:=0
+    repetir 3
+      derecha
+    recorrerLado(pap4)
+    Informar(pap4)
+  fin
+variables
+  RobotUno:robot1
+  RobotDos:robot2
+  RobotTres:robot3
+  RobotCuatro:robot4
+comenzar
+  AsignarArea(RobotUno,todaarea)
+  AsignarArea(RobotDos,todaarea)
+  AsignarArea(RobotTres,todaarea)
+  AsignarArea(RobotCuatro,todaarea)
+  Iniciar(RobotUno,10,10)
+  Iniciar(RobotDos,10,30)
+  Iniciar(RobotTres,30,30)
+  Iniciar(RobotCuatro,30,10)
+fin

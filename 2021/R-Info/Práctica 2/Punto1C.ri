@@ -1,0 +1,59 @@
+programa Punto1CPractica2
+procesos
+  proceso agarrarFlores(ES flores:numero)
+  comenzar
+    repetir 9
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flores:=flores + 1
+      mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores +1
+  fin
+areas
+  areatrabajo:AreaC(1,1,6,60)
+robots
+  robot juntador
+  variables
+    f:numero
+  comenzar
+    f:=0 
+    agarrarFlores(f)
+    EnviarMensaje(f,RobotSiete)
+  fin
+  robot fiscalizador
+  variables
+    f,max:numero
+  comenzar
+    max:=0
+    repetir 6
+      RecibirMensaje(f,*)
+      si (f>max)
+        max:=f
+    Informar(max)
+  fin
+variables
+  RobotUno:juntador
+  RobotDos:juntador
+  RobotTres:juntador
+  RobotCuatro:juntador
+  RobotCinco:juntador
+  RobotSeis:juntador
+  RobotSiete:fiscalizador
+comenzar
+  AsignarArea(RobotUno,areatrabajo)
+  AsignarArea(RobotDos,areatrabajo)
+  AsignarArea(RobotTres,areatrabajo)
+  AsignarArea(RobotCuatro,areatrabajo)
+  AsignarArea(RobotCinco,areatrabajo)
+  AsignarArea(RobotSeis,areatrabajo)
+  AsignarArea(RobotSiete,areatrabajo)
+  Iniciar(RobotUno,1,1)
+  Iniciar(RobotDos,2,11)
+  Iniciar(RobotTres,3,21)
+  Iniciar(RobotCuatro,4,31)
+  Iniciar(RobotCinco,5,41)
+  Iniciar(RobotSeis,6,51)
+  Iniciar(RobotSiete,2,1)
+fin

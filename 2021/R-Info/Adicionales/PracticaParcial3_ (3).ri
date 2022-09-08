@@ -1,0 +1,171 @@
+programa PracticaParcial3
+procesos
+  proceso juntar(ES flores:numero; ES papeles:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores + 1
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:=papeles +1
+  fin
+  proceso enviarids
+  comenzar
+    EnviarMensaje(1,uno)
+    EnviarMensaje(2,dos)
+    EnviarMensaje(3,tres)
+    EnviarMensaje(4,cuatro)
+  fin
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso posicionarse(E id:numero)
+  comenzar
+    si (id=1)
+      Pos(1,2)
+    sino
+      si (id=2)
+        Pos(1,6)
+      sino
+        si (id=3)
+          Pos(2,1)
+        sino
+          Pos(6,1)
+  fin
+  proceso ladoizquierda(ES f:numero;ES p:numero)
+  comenzar
+    izquierda
+    repetir 2
+      juntar(f,p)
+      mover
+    izquierda
+  fin
+  proceso ladoderecha(ES f:numero;ES p:numero)
+  comenzar
+    derecha
+    repetir 2
+      juntar(f,p)
+      mover
+    derecha
+  fin
+areas
+  areajuntador1:AreaP(1,2,9,4)
+  areajuntador2:AreaP(1,6,9,8)
+  areajuntador3:AreaP(2,1,4,9)
+  areajuntador4:AreaP(6,1,8,9)
+  areajefe:AreaP(20,15,20,15)
+  inicios:AreaPC(20,1,20,5)
+robots
+  robot juntadoreshorizontales
+  variables
+    f,p,id:numero
+  comenzar
+    f:=0
+    p:=0
+    RecibirMensaje(id,cinco)
+    posicionarse(id)
+    derecha
+    repetir 4
+      juntar(f,p)
+      BloquearEsquina(PosAv + 1,PosCa)
+      mover
+      juntar(f,p)
+      mover
+      LiberarEsquina(PosAv - 1,PosCa)
+    ladoizquierda(f,p)
+    repetir 4
+      juntar(f,p)
+      BloquearEsquina(PosAv - 1,PosCa)
+      mover
+      juntar(f,p)
+      mover
+      LiberarEsquina(PosAv + 1,PosCa)
+    ladoizquierda(f,p)
+    EnviarMensaje(id,cinco)
+    EnviarMensaje(f,cinco)
+    EnviarMensaje(p,cinco)
+  fin
+  robot juntadoresverticales
+  variables
+    f,p,id:numero
+  comenzar
+    f:=0
+    p:=0
+    RecibirMensaje(id,cinco)
+    posicionarse(id)
+    repetir 4
+      juntar(f,p)
+      BloquearEsquina(PosAv,PosCa + 1)
+      mover
+      juntar(f,p)
+      mover
+      LiberarEsquina(PosAv,PosCa - 1)
+    ladoderecha(f,p)
+    repetir 4
+      juntar(f,p)
+      BloquearEsquina(PosAv,PosCa - 1)
+      mover
+      juntar(f,p)
+      mover
+      LiberarEsquina(PosAv,PosCa + 1)
+    ladoderecha(f,p)
+    EnviarMensaje(id,cinco)
+    EnviarMensaje(f,cinco)
+    EnviarMensaje(p,cinco)
+  fin
+  robot jefe
+  variables
+    totalF,totalP,id,flores,papeles:numero
+  comenzar
+    totalF:=0
+    totalP:=0
+    enviarids
+    repetir 4
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(flores,uno)
+        totalF:= totalF + flores
+        RecibirMensaje(papeles,uno)
+        totalP:=totalP + papeles
+      sino
+        si (id=2)
+          RecibirMensaje(flores,dos)
+          totalF:= totalF + flores
+          RecibirMensaje(papeles,dos)
+          totalP:=totalP + papeles
+        sino
+          si (id=3)
+            RecibirMensaje(flores,tres)
+            totalF:= totalF + flores
+            RecibirMensaje(papeles,tres)
+            totalP:=totalP + papeles
+          sino
+            RecibirMensaje(flores,cuatro)
+            totalF:= totalF + flores
+            RecibirMensaje(papeles,cuatro)
+            totalP:=totalP + papeles
+    Informar('TotalFlores',totalF)
+    Informar('TotalPapeles',totalP)
+  fin
+variables
+  uno,dos:juntadoreshorizontales
+  tres,cuatro:juntadoresverticales
+  cinco:jefe
+comenzar
+  AsignarArea(uno,areajuntador1)
+  AsignarArea(dos,areajuntador2)
+  AsignarArea(tres,areajuntador3)
+  AsignarArea(cuatro,areajuntador4)
+  AsignarArea(cinco,areajefe)
+  AsignarArea(uno,inicios)
+  AsignarArea(dos,inicios)
+  AsignarArea(tres,inicios)
+  AsignarArea(cuatro,inicios)
+  Iniciar(uno,20,1)
+  Iniciar(dos,20,2)
+  Iniciar(tres,20,4)
+  Iniciar(cuatro,20,5)
+  Iniciar(cinco,20,15)
+fin

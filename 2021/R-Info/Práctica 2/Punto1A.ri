@@ -1,0 +1,52 @@
+programa Punto1APractica2
+procesos
+  proceso agarrarFlores(ES flores:numero)
+  comenzar
+    repetir 9
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        flores:=flores +1
+      mover
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:=flores+1
+  fin
+areas
+  areatrabajo:AreaPC(1,1,2,20)
+robots
+  robot robotjuntador1
+  variables
+    f,f2,diferencia1:numero
+  comenzar
+    f:=0
+    diferencia1:=0
+    agarrarFlores(f)
+    EnviarMensaje(f,RobotDos)
+    RecibirMensaje(f2,RobotDos)
+    si (f>f2)
+      diferencia1:= (f - f2)
+      Informar(diferencia1)
+  fin
+  robot robotjuntador2
+  variables
+    f2,f,diferencia2:numero
+  comenzar
+    f2:=0
+    diferencia2:=0
+    agarrarFlores(f2)
+    EnviarMensaje(f2,RobotUno)
+    RecibirMensaje(f,RobotUno)
+    si (f2>f)
+      diferencia2:= (f2 - f)
+      Informar(diferencia2)
+  fin
+variables
+  RobotUno:robotjuntador1
+  RobotDos:robotjuntador2
+comenzar
+  AsignarArea(RobotUno,areatrabajo)
+  AsignarArea(RobotDos,areatrabajo)
+  Iniciar(RobotUno,1,1)
+  Iniciar(RobotDos,2,11)
+fin
+
