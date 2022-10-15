@@ -1,2 +1,8 @@
 # TDP
-Taller de Programación 2021/2022
+Taller de Programación  
+
+Licenciatura en Sistemas  
+
+Universidad Nacional de La Plata  
+
+2021/2022
