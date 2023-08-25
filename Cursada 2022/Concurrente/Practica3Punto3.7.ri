@@ -1,0 +1,43 @@
+programa Practica3punto37
+
+areas
+  area1: AreaPC(15,23,15,23)
+  area2: AreaP(9,9,9,9)
+  area3: AreaP(11,9,11,9)
+  area4: AreaP(13,9,13,9)
+robots
+  robot juntador
+  variables
+    total,miAv,miCa:numero
+    voy:boolean
+  comenzar
+    voy:= V
+    miAv:= PosAv
+    miCa:= PosCa
+    mientras(voy=V)
+      BloquearEsquina(15,23)
+      Pos(15,23)
+      si~(HayFlorEnLaEsquina)
+        voy:= F
+      sino
+        tomarFlor
+        total:= total + 1
+      Pos(miAv,miCa)
+      LiberarEsquina(15,23)
+    Informar('total_flores',total)
+  fin
+
+variables
+  robot1,robot2,robot3:juntador
+
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area1)
+  AsignarArea(robot3,area1)
+  AsignarArea(robot1,area2)
+  AsignarArea(robot2,area3)
+  AsignarArea(robot3,area4)
+  Iniciar(robot1,9,9)
+  Iniciar(robot2,11,9)
+  Iniciar(robot3,13,9)
+fin

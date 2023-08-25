@@ -1,0 +1,71 @@
+programa Practica2Punto25
+procesos
+  proceso juntar(ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f +1
+  fin
+  proceso rectangulo(ES f:numero E alto:numero E ancho:numero)
+  comenzar
+    repetir (2)
+      repetir (alto)
+        juntar(f)
+        mover
+      derecha
+      repetir (ancho)
+        juntar(f)
+        mover
+      derecha
+  fin
+areas
+  area1:AreaP(2,2,5,7)
+  area2:AreaP(6,2,8,10)
+  area3:AreaP(1,1,1,1)
+robots
+  robot florero
+  variables
+    f,id,alto,ancho:numero
+  comenzar
+    f:=0
+    RecibirMensaje(id,robot3)
+    RecibirMensaje(alto,robot3)
+    RecibirMensaje(ancho,robot3)
+    rectangulo(f,alto,ancho)
+    EnviarMensaje(id,robot3)
+    EnviarMensaje(f,robot3)
+  fin
+  robot jefe
+  variables
+    max,maxid,f,id:numero
+  comenzar
+    max:=-1
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(5,robot1)
+    EnviarMensaje(3,robot1)
+    EnviarMensaje(8,robot2)
+    EnviarMensaje(2,robot2)
+    repetir 2
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(f,robot1)
+      sino
+        RecibirMensaje(f,robot2)
+      si (f>max)
+        max:=f
+        maxid:=id
+    Informar('Junto_mas_flores_el_robot_con_id',maxid)
+  fin
+variables
+  robot1:florero
+  robot2:florero
+  robot3:jefe
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot3,area3)
+  Iniciar(robot1,2,2)
+  Iniciar(robot2,6,2)
+  Iniciar(robot3,1,1)
+fin

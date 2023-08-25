@@ -1,0 +1,109 @@
+programa RepasoPunto3
+procesos
+  proceso identificacion(ES id:numero)
+  comenzar
+    si (PosCa=10)
+      id:=2
+    sino
+      id:=1
+  fin
+areas
+  fuenteFlores:AreaP(10,12,10,12)
+  fuentePapeles:AreaP(10,10,10,10)
+  recolectorFlores:AreaP(11,12,11,12)
+  recolectorPapeles:AreaP(11,10,11,10)
+  Base:AreaC(12,11,12,11)
+  CalleFlores:AreaP(13,12,20,12)
+  depositadorFlores:AreaP(12,12,12,12)
+  CallePapeles:AreaP(13,10,20,10)
+  depositadorPapeles:AreaP(12,10,12,10)
+  areaFiscal:AreaP(20,11,20,11)
+robots
+  robot recolector
+  variables
+    pos,vuelta:numero
+  comenzar
+    vuelta:=PosCa
+    Pos(PosAv - 1,vuelta)
+    repetir 8
+      si (PosCa=10)
+        tomarPapel
+      sino
+        tomarFlor
+      BloquearEsquina(12,11)
+      Pos(12,11)
+      si (HayPapelEnLaBolsa)
+        depositarPapel
+      sino
+        depositarFlor
+      Pos(10,vuelta)
+      LiberarEsquina(12,11)
+      si (PosCa=10)
+        EnviarMensaje(V,depositadorVerde)
+      sino
+        EnviarMensaje(V,depositadorAzul)
+  fin
+  robot depositador
+  variables
+    pos,id,vuelta,esquinas:numero
+    continuar: boolean
+  comenzar
+    vuelta:=PosCa
+    Pos(PosAv + 1,vuelta)
+    esquinas:=PosAv
+    identificacion(id)
+    mientras (esquinas<21)
+      si (PosCa=12)
+        RecibirMensaje(continuar,recolectorAzul)
+      sino
+        RecibirMensaje(continuar,recolectorVerde)
+      si (continuar)
+        BloquearEsquina(12,11)
+        Pos(12,11)
+        si (id=2)
+          tomarPapel
+        sino
+          tomarFlor
+        Pos(esquinas,vuelta)
+        LiberarEsquina(12,11)
+        si (id=2)
+          depositarPapel
+        sino
+          depositarFlor
+      esquinas:=esquinas + 1
+    EnviarMensaje(id,jefe)
+  fin
+  robot fiscal
+  variables
+    ganador,perdedor:numero
+  comenzar
+    RecibirMensaje(ganador,*)
+    RecibirMensaje(perdedor,*)
+    Informar('el_equipo_ganador_es_el',ganador)
+  fin
+variables
+  recolectorAzul:recolector
+  recolectorVerde:recolector
+  depositadorAzul:depositador
+  depositadorVerde:depositador
+  jefe:fiscal
+comenzar
+  AsignarArea(recolectorAzul,fuenteFlores)
+  AsignarArea(recolectorAzul,recolectorFlores)
+  AsignarArea(recolectorAzul,Base)
+  AsignarArea(recolectorVerde,fuentePapeles)
+  AsignarArea(recolectorVerde,recolectorPapeles)
+  AsignarArea(recolectorVerde,Base)
+  AsignarArea(depositadorAzul,depositadorFlores)
+  AsignarArea(depositadorAzul,CalleFlores)
+  AsignarArea(depositadorAzul,Base)
+  AsignarArea(depositadorVerde,depositadorPapeles)
+  AsignarArea(depositadorVerde,CallePapeles)
+  AsignarArea(depositadorVerde,Base)
+  AsignarArea(jefe,areaFiscal)
+  Iniciar(jefe,20,11)
+  Iniciar(recolectorAzul,11,12)
+  Iniciar(recolectorVerde,11,10)
+  Iniciar(depositadorAzul,12,12)
+  Iniciar(depositadorVerde,12,10)
+fin

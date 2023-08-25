@@ -1,0 +1,41 @@
+programa Practica1Punto1HB
+procesos
+  proceso juntar(ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f +1
+  fin
+  proceso rectangulo(ES f:numero)
+  comenzar
+    repetir (2)
+      repetir (5)
+        juntar(f)
+        mover
+      derecha
+      repetir (3)
+        juntar(f)
+        mover
+      derecha
+  fin
+areas
+  area1:AreaP(2,2,5,7)
+  area2:AreaP(6,2,9,7)
+robots
+  robot florero
+  variables
+    f:numero
+  comenzar
+    f:=0
+    rectangulo(f)
+    Informar(f)
+  fin
+variables
+  robot1:florero
+  robot2:florero
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  Iniciar(robot1,2,2)
+  Iniciar(robot2,6,2)
+fin

@@ -1,0 +1,87 @@
+programa Practica3Punto36
+procesos
+  proceso juntarFlores (ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1
+  fin
+  proceso dejar(E f:numero; E miPos:numero)
+  comenzar
+    repetir f
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlor
+      Pos(miPos,miPos)
+      LiberarEsquina(10,10)
+  fin
+areas
+  area1:AreaP(15,15,30,35)
+  area2:AreaP(40,40,55,60)
+  area3:AreaPC(10,10,10,10)
+  area4:AreaP(2,2,2,2)
+  area5:AreaP(6,6,6,6)
+  areaJ:AreaP(1,1,1,1)
+robots
+  robot florero
+  variables
+    f,miPos,alto:numero
+  comenzar
+    f:=0
+    RecibirMensaje(miPos,robotJ)
+    RecibirMensaje(alto,robotJ)
+    Pos(miPos,miPos)
+    repetir 2
+      repetir alto
+        juntarFlores(f)
+        mover
+      derecha
+      repetir 15
+        juntarFlores(f)
+        mover
+      derecha
+    dejar(f,miPos)
+    EnviarMensaje(V,robotJ)
+  fin
+  robot jefe
+  variables
+    alto,total:numero
+    final:boolean
+  comenzar
+    total:=0
+    final:=F
+    EnviarMensaje(15,robot1)
+    EnviarMensaje(40,robot2)
+    Random(alto,1,20)
+    EnviarMensaje(alto,robot1)
+    Random(alto,1,20)
+    EnviarMensaje(alto,robot2)
+    repetir 2
+      RecibirMensaje(final,*)
+    si (final=V)
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      mientras (HayFlorEnLaEsquina)
+        tomarFlor
+        total:= total + 1
+      LiberarEsquina(10,10)
+    Informar('flores_totales',total)
+  fin
+variables
+  robot1:florero
+  robot2:florero
+  robotJ:jefe
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot1,area3)
+  AsignarArea(robot2,area3)
+  AsignarArea(robot1,area4)
+  AsignarArea(robot2,area5)
+  AsignarArea(robotJ,areaJ)
+  AsignarArea(robotJ,area3)
+  Iniciar(robotJ,1,1)
+  Iniciar(robot1,2,2)
+  Iniciar(robot2,6,6)
+fin
+

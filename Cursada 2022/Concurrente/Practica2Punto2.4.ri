@@ -1,0 +1,63 @@
+programa Practica2Punto24
+procesos
+  proceso juntar(ES f:numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f +1
+  fin
+  proceso rectangulo(ES f:numero E alto:numero E ancho:numero)
+  comenzar
+    repetir (2)
+      repetir (alto)
+        juntar(f)
+        mover
+      derecha
+      repetir (ancho)
+        juntar(f)
+        mover
+      derecha
+  fin
+areas
+  area1:AreaP(2,2,5,7)
+  area2:AreaP(6,2,8,10)
+  area3:AreaP(1,1,1,1)
+robots
+  robot tipo1
+  variables
+    f:numero
+  comenzar
+    f:=0
+    rectangulo(f,5,3)
+    EnviarMensaje(f,robot3)
+  fin
+  robot tipo2
+  variables
+    f:numero
+  comenzar
+    f:=0
+    rectangulo(f,8,2)
+    EnviarMensaje(f,robot3)
+  fin
+  robot jefe
+  variables
+    total,f:numero
+  comenzar
+    total:=0
+    repetir 2
+      RecibirMensaje(f,*)
+      total:=total + f
+    Informar(total)
+  fin
+variables
+  robot1:tipo1
+  robot2:tipo2
+  robot3:jefe
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area2)
+  AsignarArea(robot3,area3)
+  Iniciar(robot1,2,2)
+  Iniciar(robot2,6,2)
+  Iniciar(robot3,1,1)
+fin

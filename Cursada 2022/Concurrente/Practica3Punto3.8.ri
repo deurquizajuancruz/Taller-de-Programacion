@@ -1,0 +1,109 @@
+programa Practica3Punto38
+procesos
+  proceso posicion(ES voy:boolean; ES total:numero;E miAv:numero;E miCa:numero)
+  comenzar
+    mientras(voy=V)
+      BloquearEsquina(15,23)
+      Pos(15,23)
+      si~(HayFlorEnLaEsquina)
+        voy:= F
+      sino
+        tomarFlor
+        total:= total + 1
+      Pos(miAv,miCa)
+      LiberarEsquina(15,23)
+  fin
+  proceso maximo(E idmax:numero)
+  comenzar
+    si (idmax=1)
+      EnviarMensaje(V,robot1)
+      EnviarMensaje(F,robot2)
+      EnviarMensaje(F,robot3)
+    sino
+      si (idmax=2)
+        EnviarMensaje(F,robot1)
+        EnviarMensaje(V,robot2)
+        EnviarMensaje(F,robot3)
+      sino
+        EnviarMensaje(F,robot1)
+        EnviarMensaje(F,robot2)
+        EnviarMensaje(V,robot3)
+  fin
+  proceso dejar(E total:numero; E ir:boolean; E miAv:numero; E miCa:numero; E id:numero)
+  comenzar
+    si (ir=V)
+      BloquearEsquina(20,20)
+      Pos(20,20)
+      repetir total
+        depositarFlor
+      Pos(miAv,miCa)
+      LiberarEsquina(20,20)
+      Informar(id)
+  fin
+areas
+  area1: AreaPC(15,23,15,23)
+  area2: AreaP(9,9,9,9)
+  area3: AreaP(11,9,11,9)
+  area4: AreaP(13,9,13,9)
+  area5: AreaPC(20,20,20,20)
+  areaJ: AreaP(1,1,1,1)
+robots
+  robot juntador
+  variables
+    total,miAv,miCa,id:numero
+    voy,ir:boolean
+  comenzar
+    RecibirMensaje(id,robotJ)
+    total:=0
+    voy:= V
+    miAv:= PosAv
+    miCa:= PosCa
+    posicion(voy,total,miAv,miCa)
+    Informar('total_flores',total)
+    EnviarMensaje(id,robotJ)
+    EnviarMensaje(total,robotJ)
+    RecibirMensaje(ir,robotJ)
+    dejar(total,ir,miAv,miCa,id)
+  fin
+  robot jefe
+  variables
+    idmax,fmax,id,f:numero
+  comenzar
+    fmax:=-1
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    repetir 3
+      RecibirMensaje(id,*)
+      si (id=1)
+        RecibirMensaje(f,robot1)
+      sino
+        si (id=2)
+          RecibirMensaje(f,robot2)
+        sino
+          RecibirMensaje(f,robot3)
+      si (f>fmax)
+        fmax:=f
+        idmax:=id
+    maximo(idmax)
+  fin
+variables
+  robot1,robot2,robot3:juntador
+  robotJ:jefe
+comenzar
+  AsignarArea(robot1,area1)
+  AsignarArea(robot2,area1)
+  AsignarArea(robot3,area1)
+  AsignarArea(robot1,area2)
+  AsignarArea(robot2,area3)
+  AsignarArea(robot3,area4)
+  AsignarArea(robot1,area5)
+  AsignarArea(robot2,area5)
+  AsignarArea(robot3,area5)
+  AsignarArea(robotJ,areaJ)
+  Iniciar(robot1,9,9)
+  Iniciar(robot2,11,9)
+  Iniciar(robot3,13,9)
+  Iniciar(robotJ,1,1)
+fin
+
